@@ -14,10 +14,10 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($paginate)
     {
 
-        $usuarios = User::all();
+        $usuarios = User::paginate($paginate);
         return json_encode($usuarios);
     }
 
