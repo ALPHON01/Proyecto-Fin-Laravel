@@ -266,55 +266,55 @@ class UserController extends Controller
 
     public function postFiltrado(Request $request)
     {
-        return json_encode($request);
-        // $usuario = new User();
-        // $name = false;
-        // $surname = false;
-        // $email = false;
-        // $user=null;
-        // if(isset($request->name) && !empty($request->name)) {
-        //     $usuario->name = '%'.$request->name.'%';
-        //     $name = true;
 
-        // }
-        // if(isset($request->surname) && !empty($request->surname)) {
-        //     $usuario->surname = '%'.$request->surname.'%';
-        //     $surname = true;
+        $usuario = new User();
+        $name = false;
+        $surname = false;
+        $email = false;
+        $user=null;
+        if(isset($request->name) && !empty($request->name)) {
+            $usuario->name = '%'.$request->name.'%';
+            $name = true;
 
-        // }
-        // if(isset($request->email) && !empty($request->email)) {
-        //     $usuario->email = '%'.$request->email.'%';
-        //    $email = true;
-        // }
+        }
+        if(isset($request->surname) && !empty($request->surname)) {
+            $usuario->surname = '%'.$request->surname.'%';
+            $surname = true;
 
-        // if ($name == true) {
-        //     $user = User::where('name','like',$usuario->name);
-        //     if ($surname == true) {
-        //         $user->where('surname','like',$usuario->surname);
-        //         if ($email == true) {
-        //             $user->where('email','like',$usuario->email);
-        //         }
-        //     }else{
-        //         if ($email == true) {
-        //             $user->where('email','like',$usuario->email);
-        //         }
-        //     }
-        // }else{
-        //    if ($surname == true) {
-        //     $user = User::where('surname','like',$usuario->surname);
-        //     if ($email == true) {
-        //         $user->where('email','like',$usuario->email);
-        //     }
-        //    }else {
-        //     if ($email == true) {
-        //        $user = User::where('email','like',$usuario->email);
+        }
+        if(isset($request->email) && !empty($request->email)) {
+            $usuario->email = '%'.$request->email.'%';
+           $email = true;
+        }
 
-        //     }else {
-        //         return json_encode(['status' => 400, 'statusText'=>'Bad Request', 'message'=> "Indique los campos de búsqueda"]);
-        //     }
-        //    }
-        // }
-        // return json_encode($user->get());
+        if ($name == true) {
+            $user = User::where('name','like',$usuario->name);
+            if ($surname == true) {
+                $user->where('surname','like',$usuario->surname);
+                if ($email == true) {
+                    $user->where('email','like',$usuario->email);
+                }
+            }else{
+                if ($email == true) {
+                    $user->where('email','like',$usuario->email);
+                }
+            }
+        }else{
+           if ($surname == true) {
+            $user = User::where('surname','like',$usuario->surname);
+            if ($email == true) {
+                $user->where('email','like',$usuario->email);
+            }
+           }else {
+            if ($email == true) {
+               $user = User::where('email','like',$usuario->email);
+
+            }else {
+                return json_encode(['status' => 400, 'statusText'=>'Bad Request', 'message'=> "Indique los campos de búsqueda"]);
+            }
+           }
+        }
+        return json_encode($user->get());
 
 
     }
