@@ -33,6 +33,7 @@ Route::delete('/users/{id}',[UserController::class,'destroy']);
 Route::post('/users/{email}',[UserController::class,'getByEmail']);
 Route::get('/entrenadores/all',[UserController::class,'getEntrenadores']);
 Route::get('/jugadores/all',[UserController::class,'getJugadores']);
+Route::post('/users/filtrado', [UserController::class,'postFiltrado']);
 
 Route::get('/solicitudes/all',[SolicitudController::class,'getAll']);
 Route::get('/solicitudes/misequipos/{id}',[SolicitudController::class,'misEquipos']);
