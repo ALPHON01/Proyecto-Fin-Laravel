@@ -45,6 +45,9 @@ Route::delete('/solicitudes/borrar',[SolicitudController::class,'borrarSolicitud
 
 Route::get('/equipos/all',[EquipoController::class,'getAll']);
 Route::post('/equipo/add', [EquipoController::class,'store']);
+Route::get('/equipos/entrenador/{id}',[EquipoController::class,'getEquiposEntrenador']);
+
+
 
 Route::get('/ligas/all',[LigaController::class,'getAll']);
 

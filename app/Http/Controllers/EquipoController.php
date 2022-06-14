@@ -41,6 +41,11 @@ class EquipoController extends Controller
         }
 
     }
+    public function getEquiposEntrenador($id)
+    {
+       $equipos = Equipo::where('entrenador_id',8)->get();
+       return json_encode($equipos);
+    }
 
 
 }
