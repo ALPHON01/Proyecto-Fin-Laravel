@@ -39,72 +39,66 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $errors=[];
+        $errors = [];
         $usuario = new User();
         if (isset($request->name) && !empty($request->name)) {
             $usuario->name = $request->name;
-        }else {
+        } else {
             array_push($errors, "Rellene el campo nombre. ");
         }
         if (isset($request->surname) && !empty($request->surname)) {
             $usuario->surname = $request->surname;
-        }else {
+        } else {
             array_push($errors, "Rellene el campo apellidos. ");
         }
         if (isset($request->fecha_nac) && !empty($request->fecha_nac)) {
-            if (preg_match("/[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]/",$request->fecha_nac) ) {
+            if (preg_match("/[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]/", $request->fecha_nac)) {
                 $usuario->fecha_nac = $request->fecha_nac;
-            }else{
-                 array_push($errors, "El formato de la fecha no es válido. ");
+            } else {
+                array_push($errors, "El formato de la fecha no es válido. ");
             }
-
-        }else {
+        } else {
             array_push($errors, "Rellene el campo fecha nacimiento. ");
         }
         if (isset($request->role_id) && !empty($request->role_id)) {
-            if ($request->role_id >0 && $request->role_id<4) {
+            if ($request->role_id > 0 && $request->role_id < 4) {
                 $usuario->role_id = $request->role_id;
-            }else {
+            } else {
                 array_push($errors, "Seleccione un rol válido. ");
             }
-
-        }else{
+        } else {
             array_push($errors, "Seleccione un rol. ");
         }
         if (isset($request->email) && !empty($request->email)) {
             if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
                 $usuario->email = $request->email;
-            }else {
+            } else {
                 array_push($errors, "El email no es válido. ");
             }
-            if(User::where('email',$request->email)->first()){
+            if (User::where('email', $request->email)->first()) {
                 array_push($errors, "El email ya está en nuestra Base de Datos. ");
             }
-
-        }else{
+        } else {
             array_push($errors, "Rellene el campo email. ");
         }
         if (isset($request->password) && !empty($request->password)) {
-            if (preg_match("/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!^@#$%]{8,12}$/",$request->password )) {
+            if (preg_match("/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!^@#$%]{8,12}$/", $request->password)) {
                 $usuario->password = sha1($request->password);
-            }else{
+            } else {
                 array_push($errors, "La contraseña debe tener entre 8 y 12 caracteres incluyendo letras mayúsculas, dígitos y carácteres especiales. ");
             }
-
-        }else {
+        } else {
             array_push($errors, "La contraseña debe tener entre 8 y 12 caracteres incluyendo letras mayúsculas, dígitos y carácteres especiales. ");
         }
 
 
 
-        if (count($errors)>0) {
-            return json_encode(['status' => 400, 'statusText'=>'Bad Request', 'message'=> $errors,'usuario'=>$usuario]);
-        }else {
+        if (count($errors) > 0) {
+            return json_encode(['status' => 400, 'statusText' => 'Bad Request', 'message' => $errors, 'usuario' => $usuario]);
+        } else {
             $usuario->save();
-            return json_encode(['status' => 200, 'statusText'=>'OK', 'message'=> "Insertado Correctamente",'usuario'=>$usuario]);
-
+            return json_encode(['status' => 200, 'statusText' => 'OK', 'message' => "Insertado Correctamente", 'usuario' => $usuario]);
         }
-
     }
 
     /**
@@ -139,77 +133,68 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $errors=[];
+        $errors = [];
         $usuario = User::findOrFail($id);
         if (isset($request->name) && !empty($request->name)) {
             $usuario->name = $request->name;
-        }else {
+        } else {
             array_push($errors, "Rellene el campo nombre. ");
         }
         if (isset($request->surname) && !empty($request->surname)) {
             $usuario->surname = $request->surname;
-        }else {
+        } else {
             array_push($errors, "Rellene el campo apellidos. ");
         }
         if (isset($request->fecha_nac) && !empty($request->fecha_nac)) {
-            if (preg_match("/[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]/",$request->fecha_nac) ) {
+            if (preg_match("/[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]/", $request->fecha_nac)) {
                 $usuario->fecha_nac = $request->fecha_nac;
-            }else{
-                 array_push($errors, "El formato de la fecha no es válido. ");
+            } else {
+                array_push($errors, "El formato de la fecha no es válido. ");
             }
-
-        }else {
+        } else {
             array_push($errors, "Rellene el campo fecha nacimiento. ");
         }
         if (isset($request->role_id) && !empty($request->role_id)) {
-            if ($request->role_id >0 && $request->role_id<4) {
+            if ($request->role_id > 0 && $request->role_id < 4) {
                 $usuario->role_id = $request->role_id;
-            }else {
+            } else {
                 array_push($errors, "Seleccione un rol válido. ");
             }
-
-        }else{
+        } else {
             array_push($errors, "Seleccione un rol. ");
         }
         if (isset($request->email) && !empty($request->email)) {
             if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
                 if ($request->email != $usuario->email) {
-                    if(User::where('email',$request->email)->count()!= 0){
+                    if (User::where('email', $request->email)->count() != 0) {
                         array_push($errors, "El email ya está en nuestra Base de Datos. ");
-                    }else {
-
+                    } else {
                     }
-                }else {
+                } else {
                     $usuario->email = $request->email;
                 }
-            }else {
+            } else {
                 array_push($errors, "El email no es válido. ");
             }
-
-
-
-        }else{
+        } else {
             array_push($errors, "Rellene el campo email. ");
         }
         if (isset($request->password) && !empty($request->password)) {
-            if (preg_match("/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!^@#$%]{8,12}$/",$request->password )) {
+            if (preg_match("/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!^@#$%]{8,12}$/", $request->password)) {
                 $usuario->password = sha1($request->password);
-            }else{
+            } else {
                 array_push($errors, "La contraseña debe tener entre 8 y 12 caracteres incluyendo letras mayúsculas, dígitos y carácteres especiales. ");
             }
-
-        }else {
-
+        } else {
         }
 
 
 
-        if (count($errors)>0) {
-            return json_encode(['status' => 400, 'statusText'=>'Bad Request', 'message'=> $errors,'usuario'=>$usuario]);
-        }else {
+        if (count($errors) > 0) {
+            return json_encode(['status' => 400, 'statusText' => 'Bad Request', 'message' => $errors, 'usuario' => $usuario]);
+        } else {
             $usuario->save();
-            return json_encode(['status' => 200, 'statusText'=>'OK', 'message'=> "Actualizado Correctamente",'usuario'=>$usuario]);
-
+            return json_encode(['status' => 200, 'statusText' => 'OK', 'message' => "Actualizado Correctamente", 'usuario' => $usuario]);
         }
     }
 
@@ -225,61 +210,57 @@ class UserController extends Controller
         try {
             $usuario = User::find($id)->delete();
             User::destroy($id);
-            return json_encode(['status' => 200, 'statusText'=>'OK', 'message'=> "Eliminado correctamente",'usuario'=>$usuario]);
-
+            return json_encode(['status' => 200, 'statusText' => 'OK', 'message' => "Eliminado correctamente", 'usuario' => $usuario]);
         } catch (\Throwable $th) {
-            return json_encode(['status' => 400, 'statusText'=>'Bad Request', 'message'=> "Procure eliminar al usuario en el resto de tablas"]);
+            return json_encode(['status' => 400, 'statusText' => 'Bad Request', 'message' => "Procure eliminar al usuario en el resto de tablas"]);
         }
-
-
-
-
     }
 
 
     /**
      * Metodo para el login
      */
-    public function login(Request $request){
+    public function login(Request $request)
+    {
 
         if (empty($request->email)) {
-            return json_encode(['status' => 400, 'statusText'=>'Bad Request', 'message'=> "Rellene los campos"]);
+            return json_encode(['status' => 400, 'statusText' => 'Bad Request', 'message' => "Rellene los campos"]);
         }
 
-        $email = User::where('email','like',$request->email)->first();
-        $password = User::where('password','like', sha1($request->password) )->first();
+        $email = User::where('email', 'like', $request->email)->first();
+        $password = User::where('password', 'like', sha1($request->password))->first();
 
         if ($email) {
             if ($password) {
 
-                return json_encode(['status' => 200, 'statusText'=>'OK', 'message'=> "Logueado correctamente",'token'=>$request->email]);
-            }else {
-                return json_encode(['status' => 400, 'statusText'=>'Bad Request', 'message'=> "Fallo en la contraseña"]);
+                return json_encode(['status' => 200, 'statusText' => 'OK', 'message' => "Logueado correctamente", 'token' => $request->email]);
+            } else {
+                return json_encode(['status' => 400, 'statusText' => 'Bad Request', 'message' => "Fallo en la contraseña"]);
             }
-        }else {
-            return json_encode(['status' => 400, 'statusText'=>'Bad Request', 'message'=> "El email no es correcto"]);
+        } else {
+            return json_encode(['status' => 400, 'statusText' => 'Bad Request', 'message' => "El email no es correcto"]);
         }
     }
 
 
     public function getByEmail($email)
     {
-        $usuario = User::where('email','=',$email)->first();
-        if($usuario){
-            return json_encode(['status' => 200, 'statusText'=>'OK', 'message'=> "Logueado correctamente",'usuario'=>$usuario]);
-        }else {
-            return json_encode(['status' => 400, 'statusText'=>'Bad Request', 'message'=> "Ha ocurrido un error con el token loguease de nuevo"]);
+        $usuario = User::where('email', '=', $email)->first();
+        if ($usuario) {
+            return json_encode(['status' => 200, 'statusText' => 'OK', 'message' => "Logueado correctamente", 'usuario' => $usuario]);
+        } else {
+            return json_encode(['status' => 400, 'statusText' => 'Bad Request', 'message' => "Ha ocurrido un error con el token loguease de nuevo"]);
         }
     }
 
     public function getEntrenadores()
     {
-        $entrenadores = User::where('role_id',2)->get();
+        $entrenadores = User::where('role_id', 2)->get();
         return json_encode($entrenadores);
     }
     public function getJugadores()
     {
-        $jugadores = User::where('role_id',3)->get();
+        $jugadores = User::where('role_id', 3)->get();
         return json_encode($jugadores);
     }
 
@@ -337,5 +318,4 @@ class UserController extends Controller
 
 
     }
-
 }
